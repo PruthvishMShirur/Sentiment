@@ -132,7 +132,8 @@ def home():
         name = request.form.get('name')
         email = request.form.get('email')
         dept = request.form.get('dept')
-        sentence = request.form.get('feedback')
+        feedback = request.form.get('feedback')
+        sentence = feedback+" to "+dept+" department"
         blob = TextBlob(sentence)
         if blob.sentiment[0] == 0:
             sentiment = "Neutral"
@@ -178,7 +179,8 @@ def change_senti(num):
         obj.Sentiment=request.values.get('changedsentiment')
     obj.Change = 1
     db.session.commit()
-    Pickled_Model.fit_one(obj.Text,request.values.get('changedsentiment'))
+    sentence = obj.Text+" to "+obj.department+" department"
+    Pickled_Model.fit_one(sentence,request.values.get('changedsentiment'))
     with open(Pkl_Filename, 'wb') as file:  
         pickle.dump(Pickled_Model, file)
     file.close    
